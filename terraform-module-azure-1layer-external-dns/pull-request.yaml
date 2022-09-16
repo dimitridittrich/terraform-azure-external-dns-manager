@@ -1,0 +1,9 @@
+resources:
+  repositories:
+    - repository: terraform-modules-manager
+      type: git
+      name: terraform-modules-manager
+      ref: master
+trigger: none
+stages:
+  - template: pipeline/terraform-module/pull-requests.yaml@terraform-modules-manager
