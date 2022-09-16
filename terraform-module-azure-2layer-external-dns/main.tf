@@ -2,13 +2,7 @@ module "dns_zone" {
   source              = "git@ssh.dev.azure.com:v3/AZDEVOPS-ORGANIZATION/AZDEVOPS-PROJECT/terraform-module-azurerm-dns-zone?ref=1.0.0"  
   name                = var.dns_zone_name
   resource_group_name = var.resource_group_name
-  tags                = {} #module.tags.default
-
-   lifecycle {
-    ignore_changes = [
-      soa_record,tags
-    ]
-  }
+  tags                = {}
 }
 
 resource "azurerm_dns_a_record" "dns_a_record" {
