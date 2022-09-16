@@ -1,0 +1,36 @@
+formatter: markdown
+
+header-from: HEADER.md
+
+sections:
+  hide: []
+  show:
+    - header
+    - providers
+    - inputs
+    - outputs
+
+content: |-
+  {{ .Header }} 
+  {{ .Providers }}
+  {{ .Inputs }}
+  {{ .Outputs }} 
+
+output:
+  file: README.md
+  mode: replace
+  template: |
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  indent: 4
+  required: true
+  sensitive: true
+  type: true

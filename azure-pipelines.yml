@@ -1,0 +1,58 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: ALM
+  displayName: "Verifying and Publishing Modules"
+  jobs:
+  - job: INIT_TF_DOCS
+    displayName: "Verifying Module"
+    steps:
+    - checkout: self
+      persistCredentials: true
+    - task: Bash@3
+      displayName: "Installing Terraform-Docs"
+      inputs:
+        targetType: 'filePath'
+        filePath: "scripts/install.sh"
+        workingDirectory: '$(Build.SourcesDirectory)'
+    - task: AzureKeyVault@1
+      displayName: "Fetching KeyVault Secrets"
+      inputs:
+        azureSubscription: 'subscription-name'
+        keyVaultName: $(CLOUD_SHARED_KV_NAME)
+        secretsFilter: '*'
+        runAsPreJob: false
+    - task: Bash@3
+      displayName: "Running Terraform-docs and publushing to repository."
+      env:
+        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
+        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd example/
+          terraform init
+          terraform plan -var-file="../example.tfvars" -out tf.plan
+          terraform show -json tf.plan  > tf.json
+          cd ../
+          terraform init 
+          if [[ $( /usr/local/bin/tflint -f json | jq '.issues | length') > 0 ]] | [[ $(checkov -f example/tf.json -o json | jq '. | length') > 0 ]]; then
+              /usr/local/bin/tflint
+              checkov -f tf.json        
+          else
+            terraform-docs ./
+            git config --global user.email "testemailbot@testemail.com.br"
+            git config --global user.name "AzureDevOps Agent"
+            git checkout -b add-docs
+            git add README.md
+            git commit -m "Create and Update README.md"
+            git checkout master
+            git merge add-docs
+            git push origin master --force
+          fi

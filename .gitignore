@@ -1,0 +1,80 @@
+# ------------------------------------------------------------------------------
+# OPERATING SYSTEMS
+# ------------------------------------------------------------------------------
+
+### macOS/Linux/Windows ###
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+.Trash-*
+
+Thumbs.db
+[Dd]esktop.ini
+*.lnk
+
+# ------------------------------------------------------------------------------
+# EDITORS
+# ------------------------------------------------------------------------------
+
+### Vim ###
+
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+### JetBrains (IntelliJ, PyCharm, etc) ###
+
+.idea
+*.iml
+*.ipr
+*.iws
+/out
+
+### Sublime Text ###
+
+*.sublime-project
+*.sublime-workspace
+
+### VSCode ###
+
+.vscode/**
+!.vscode/README.md
+!.vscode/extensions.json
+!.vscode/recommended-*.json
+!.vscode/setup.sh
+
+# ------------------------------------------------------------------------------
+# TERRAFORM TOOLING
+# ------------------------------------------------------------------------------
+
+### Terraform ###
+
+# Local .terraform directories
+.terraform
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Lock file
+.terraform.lock.hcl
+
+# Crash log files
+crash.log
+
+# Vars
+credentials*.tfvars
+secrets*.tfvars
+
+### Compressed ###
+
+*.zip
+
+### Atlantis ###
+
+*.tfplan
